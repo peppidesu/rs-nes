@@ -686,6 +686,7 @@ impl Cpu {
         self.set_nz_flags(result);
         result
     }
+    
     /// ALU logical shift right; sets flags and returns result
     pub fn alu_lsr(&mut self, value: u8) -> u8 {
         let result = value >> 1;
@@ -693,6 +694,7 @@ impl Cpu {
         self.set_nz_flags(result);
         result
     }
+
     /// ALU rotate left; sets flags and returns result
     pub fn alu_rol(&mut self, value: u8) -> u8 {
         let carry = self.status & 0x01;
@@ -701,6 +703,7 @@ impl Cpu {
         self.set_nz_flags(result);
         result
     }
+
     /// ALU rotate right; sets flags and returns result
     pub fn alu_ror(&mut self, value: u8) -> u8 {
         let carry = self.status & 0x01;
@@ -709,11 +712,13 @@ impl Cpu {
         self.set_nz_flags(result);
         result
     }
+
     /// ALU push; sets flags and returns result
     pub fn push(&mut self, value: u8) {
         self.address_space.write(0x0100 | self.sp as u16, value);
         self.sp = self.sp.wrapping_sub(1);
     }
+
     /// ALU pull; sets flags and returns result
     pub fn pull(&mut self) -> u8 {
         self.sp = self.sp.wrapping_add(1);
@@ -737,7 +742,7 @@ impl Cpu {
         if self.cycles == 0 {
             let opcode = self.address_space.read(self.pc);
             self.cycles = CYCLES[opcode as usize];
-            
+
             let opcode = Opcode::from(opcode).unwrap();
             opcode.execute(self);
             
